@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const feeds = {
         transfermarkt: 'https://www.transfermarkt.com/rss/news',
         skysports: 'https://www.skysports.com/rss/12040',
-        kooora: 'https://www.kooora.com/?rss' // Update if this URL is incorrect
+        kooora: 'https://www.kooora.com/?rss', // Update if this URL is incorrect
+        asharq: 'https://www.sports.asharq.com/rss', // Example RSS feed (you'll need the correct URL)
+        marca: 'https://e00-marca.uecdn.es/rss/en/football.xml', // Adjusted for Marca's feed
+        nytimes: 'https://rss.nytimes.com/services/xml/rss/nyt/Soccer.xml' // NYTimes Soccer RSS
     };
 
     // Function to fetch and display RSS feed
@@ -48,11 +51,14 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchFeed(feeds.transfermarkt, 'transfermarkt');
         fetchFeed(feeds.skysports, 'skysports');
         fetchFeed(feeds.kooora, 'kooora');
+        fetchFeed(feeds.asharq, 'asharq');
+        fetchFeed(feeds.marca, 'marca');
+        fetchFeed(feeds.nytimes, 'nytimes');
     }
 
     // Update feeds immediately on page load
     updateAllFeeds();
 
-    // Set an interval to update feeds every 15 minutes (900000 milliseconds)
-    setInterval(updateAllFeeds, 900000); // 15 minutes in milliseconds
+    // Set an interval to update feeds every 10 minutes (600000 milliseconds)
+    setInterval(updateAllFeeds, 600000); // 10 minutes in milliseconds
 });

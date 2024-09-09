@@ -4,26 +4,204 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football News Aggregator</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .news-section {
+            margin-bottom: 30px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-section h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #2980b9;
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+        }
+
+        .news-container {
+            margin-top: 10px;
+        }
+
+        .news-item {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .news-item a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 18px;
+        }
+
+        .news-item a:hover {
+            color: #2980b9;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background-color: #2c3e50;
+            color: #fff;
+        }
+
+        .update-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #2980b9;
+            color: #fff;
+            text-align: center;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .update-button:hover {
+            background-color: #1a5276;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Football News</h1>
-    </header>
-    <main>
-        <section id="transfermarkt">
+
+    <div class="container">
+        <h1>Latest Football News</h1>
+
+        <div id="transfermarkt" class="news-section">
             <h2>Transfermarkt News</h2>
-            <div class="news-container"></div>
-        </section>
-        <section id="skysports">
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <div id="skysports" class="news-section">
             <h2>Sky Sports News</h2>
-            <div class="news-container"></div>
-        </section>
-        <section id="kooora">
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <div id="kooora" class="news-section">
             <h2>Kooora News</h2>
-            <div class="news-container"></div>
-        </section>
-    </main>
-    <script src="script.js"></script>
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <div id="asharq" class="news-section">
+            <h2>Sports.Asharq News</h2>
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <div id="marca" class="news-section">
+            <h2>Marca News</h2>
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <div id="nytimes" class="news-section">
+            <h2>New York Times News</h2>
+            <div class="news-container">Loading news...</div>
+        </div>
+
+        <button class="update-button" id="updateButton">Update Every 1 Minute</button>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Football News Aggregator - All Rights Reserved</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const feeds = {
+                transfermarkt: 'https://www.transfermarkt.com/rss/news',
+                skysports: 'https://www.skysports.com/rss/12040',
+                kooora: 'https://www.kooora.com/?rss',
+                asharq: 'https://www.sports.asharq.com/rss',
+                marca: 'https://e00-marca.uecdn.es/rss/en/football.xml',
+                nytimes: 'https://rss.nytimes.com/services/xml/rss/nyt/Soccer.xml'
+            };
+
+            function fetchFeed(url, containerId) {
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        let parser = new DOMParser();
+                        let xml = parser.parseFromString(data, "text/xml");
+                        let items = xml.querySelectorAll("item");
+                        let container = document.querySelector(`#${containerId} .news-container`);
+                        container.innerHTML = '';
+
+                        if (items.length === 0) {
+                            container.innerHTML = "No news items found.";
+                        } else {
+                            items.forEach(item => {
+                                let title = item.querySelector("title").textContent;
+                                let link = item.querySelector("link").textContent;
+                                let newsItem = document.createElement("div");
+                                newsItem.className = "news-item";
+                                newsItem.innerHTML = `<a href="${link}" target="_blank">${title}</a>`;
+                                container.appendChild(newsItem);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching the RSS feed from ${url}:`, error);
+                        let container = document.querySelector(`#${containerId} .news-container`);
+                        container.innerHTML = "Failed to load news. Please try again later.";
+                    });
+            }
+
+            function updateAllFeeds() {
+                fetchFeed(feeds.transfermarkt, 'transfermarkt');
+                fetchFeed(feeds.skysports, 'skysports');
+                fetchFeed(feeds.kooora, 'kooora');
+                fetchFeed(feeds.asharq, 'asharq');
+                fetchFeed(feeds.marca, 'marca');
+                fetchFeed(feeds.nytimes, 'nytimes');
+            }
+
+            // Update feeds immediately on page load
+            updateAllFeeds();
+
+            // Set an interval to update feeds every 10 minutes (600000 milliseconds)
+            setInterval(updateAllFeeds, 600000);
+
+            // Reload the page every 10 minutes
+            setInterval(function() {
+                location.reload();
+            }, 600000); // 10 minutes in milliseconds
+
+            // Button for 1-minute updates
+            document.getElementById("updateButton").addEventListener("click", function() {
+                setInterval(updateAllFeeds, 60000); // Update every 1 minute (60000 milliseconds)
+                alert("The page will now update every 1 minute!");
+            });
+        });
+    </script>
+
 </body>
 </html>
