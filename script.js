@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Define RSS feed URLs
     const feeds = {
         transfermarkt: 'https://www.transfermarkt.com/rss/news',
-        skysports: 'https://www.skysports.com/rss/12040',
-        kooora: 'https://www.kooora.com/?rss' // Update if this URL is incorrect
+        skysports: 'http://localhost:3000/fetch_feed?url=https://www.skysports.com/rss/12040',
+        marca: 'http://localhost:3000/fetch_feed?url=https://www.marca.com/rss/futbol.xml', // Updated Marca URL
+        nytimes: 'http://localhost:3000/fetch_feed?url=https://rss.nytimes.com/services/xml/rss/nyt/Soccer.xml',
+        goal: 'http://localhost:3000/fetch_feed?url=https://rss.app/feeds/UW9VnxqQ3OCkv4Wj.xml'
     };
 
-    // Function to fetch and display RSS feed
     function fetchFeed(url, containerId) {
         fetch(url)
             .then(response => {
@@ -20,8 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 let xml = parser.parseFromString(data, "text/xml");
                 let items = xml.querySelectorAll("item");
                 let container = document.querySelector(`#${containerId} .news-container`);
-                
-                container.innerHTML = ''; // Clear existing content
+                container.innerHTML = '';
 
                 if (items.length === 0) {
                     container.innerHTML = "No news items found.";
@@ -43,16 +42,28 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Function to update all feeds
     function updateAllFeeds() {
         fetchFeed(feeds.transfermarkt, 'transfermarkt');
         fetchFeed(feeds.skysports, 'skysports');
-        fetchFeed(feeds.kooora, 'kooora');
+        fetchFeed(feeds.marca, 'marca');
+        fetchFeed(feeds.nytimes, 'nytimes');
+        fetchFeed(feeds.goal, 'goal');
     }
 
     // Update feeds immediately on page load
     updateAllFeeds();
 
-    // Set an interval to update feeds every 15 minutes (900000 milliseconds)
-    setInterval(updateAllFeeds, 900000); // 15 minutes in milliseconds
+    // Set an interval to update feeds every 10 minutes (600000 milliseconds)
+    setInterval(updateAllFeeds, 600000);
+
+    // Reload the page every 10 minutes
+    setInterval(function() {
+        location.reload();
+    }, 600000);
+
+    // Button for 1-minute updates
+    document.getElementById("updateButton").addEventListener("click", function() {
+        setInterval(updateAllFeeds, 60000); // Update every 1 minute (60000 milliseconds)
+        alert("The page will now update every 1 minute!");
+    });
 });
