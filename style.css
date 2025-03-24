@@ -1,44 +1,62 @@
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-}
-
-header {
-    background-color: #333;
+    background: url('HEX WHITE.png') no-repeat center center fixed;
+    background-size: cover;
     color: white;
-    padding: 10px 0;
+}
+
+/* En-tête */
+header {
+    background-color: rgba(255, 165, 0, 0.8); /* Orange semi-transparent */
+    color: white;
+    padding: 20px 0;
     text-align: center;
+    position: relative;
 }
 
-h1 {
+/* Logo */
+.logo {
+    width: 150px; /* Ajuste la taille */
+    height: auto;
+    display: block;
+    margin: 10px auto; /* Centre le logo */
+}
+
+/* Titres */
+h1, h2 {
+    background-color: rgba(255, 165, 0, 0.8);
+    color: black;
+    padding: 10px;
     margin: 0;
+    border-radius: 4px;
 }
 
+/* Contenu principal */
 main {
     padding: 20px;
 }
 
+/* Sections de news */
 section {
     margin-bottom: 30px;
-}
-
-h2 {
-    background-color: #444;
-    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 10px;
-    margin: 0;
+    border-radius: 8px;
 }
 
+/* Conteneur des news */
 .news-container {
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid #FFA500;
     padding: 15px;
 }
 
+/* Élément individuel d'une news */
 .news-item {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #FFA500;
     padding: 10px 0;
 }
 
@@ -46,11 +64,14 @@ h2 {
     border-bottom: none;
 }
 
+/* Liens des news */
 .news-item a {
     text-decoration: none;
-    color: #333;
+    color: white;
+    font-weight: bold;
 }
 
 .news-item a:hover {
     text-decoration: underline;
+    color: #FFA500;
 }
